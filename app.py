@@ -1,3 +1,4 @@
+#this library is going to be used to track when the task was created
 from datetime import datetime
 
 #Reminder to create unit tests
@@ -9,7 +10,7 @@ class Task:
         self.status = status
         self.priority = priority
         self.date = date
-    #Shows the task in string form
+    #this will give a good print to screen version of a task for the user to see
     def __str__(self):
         return f"ID: {self.id}, Desc: {self.description}, Status: {self.status}, Priority: {self.priority}, Date: {self.date}"
             
@@ -30,22 +31,23 @@ class TaskList:
 
     def removeTask(self, taskId):
         #loop through tasks
-        for task in self.tasks[:]:
+        for task in self.tasks[:]: #[:] slice creates temp tasks list to iterate through without bugging out
             #if task has same id has user input
             if taskId == task.id:
                 #remove task from list
                 self.tasks.remove(task)
                 return f"Removed task: {task}" #Confirm remove
+            #If user inputs the wrong id or wrong format
             return f"Task ID {taskId} not found"
 
     def showList(self):
         for task in self.tasks:
             print(f"\n{task}\n")
 def main():
-    print("working")
     """
     
     Console and GUI version of the application
+    
     Set to True for application window
     Set to False for simplified console version
     
@@ -53,37 +55,45 @@ def main():
     user_gui = False
     #Create instance of TaskList so main can access functions
     todo = TaskList()
-    
-    #Testing
+    #False for simplified console version
     while user_gui == False:
+        #simple user interface
         print("--------------")
         print("1. Add task")
         print("2. Remove task")
         print("3. Show Tasks")
         print("4. Exit")
         print("--------------")
-        
+        #grabs input from user
         user_input = input("\nInput Number: ")
         #instead of elif, I like this better
         #takes user input and matches it to a case
         match user_input:
             case "1":   
-                task_input = []
+                
                 print("--------------")
-                task_input.append(input("Task Description:\n"))
-                print("--------------")
-                print("Enter Priority")
-                print("--------------")
-                print("1. Low")
-                print("2. Medium")
-                print("3. High")
-                print("--------------")
-                task_input.append(input("\nInput(Low/Medium/High): "))
+                task_descr = input("Task Description:\n\n")
+
+                while True:
+                    print("--------------")
+                    print("Enter Priority")
+                    print("--------------")
+                    print("1. Low")
+                    print("2. Medium")
+                    print("3. High")
+                    print("--------------")
+                    task_prio = input("\nInput(Low/Medium/High): ")
+                    if task_prio == "Low" or task_prio == "Medium" or task_prio == "High":
+                        print(todo.addTask(task_descr, task_prio))
+                        break
+                    else:
+                        print(f"{task_prio} is not a valid priority")
+                
+
                 
                 #Call addTask function in TaskList class
                 #Send user input
                 #print needed to display task
-                print(todo.addTask(task_input[0], task_input[1]))
             case "2":
                 print("--------------")
                 print("Enter Task Id")
